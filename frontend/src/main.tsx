@@ -4,9 +4,11 @@ import { Download } from "lucide-react";
 import { api } from "./api";
 import { TelaEditor } from "./TelaEditor";
 import { TelaPerfis } from "./TelaPerfis";
+import { BotaoTema } from "./componentes/BotaoTema";
 import { MarcaIcone, MarcaNome } from "./componentes/Marca";
 import { Rodape } from "./componentes/Rodape";
 import { registrarServiceWorker, useInstalar } from "./pwa";
+import "./tema";
 import type { Catalogo } from "./tipos";
 import "./estilos.css";
 
@@ -69,11 +71,14 @@ function App() {
         <MarcaIcone tamanho={34} />
         <MarcaNome />
         <small>Preparação de imagem padrão do Windows</small>
-        {instalar && (
-          <button type="button" className="botao instalar" onClick={instalar} title="Instalar como aplicativo">
-            <Download size={16} /> <span className="so-largo">Instalar app</span>
-          </button>
-        )}
+        <div className="marca-acoes">
+          {instalar && (
+            <button type="button" className="botao" onClick={instalar} title="Instalar como aplicativo">
+              <Download size={16} /> <span className="so-largo">Instalar app</span>
+            </button>
+          )}
+          <BotaoTema />
+        </div>
       </header>
       <TelaPerfis abrir={(id) => ir(`/p/${id}/contas`)} />
     </>

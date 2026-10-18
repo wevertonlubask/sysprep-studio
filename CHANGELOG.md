@@ -4,6 +4,18 @@ Versões no padrão [SemVer](https://semver.org/lang/pt-BR/): **MAJOR** quebra p
 existentes, **MINOR** traz recurso novo, **PATCH** corrige ou melhora sem mudar o que o usuário faz.
 A versão fica em `frontend/package.json` e aparece no rodapé do sistema.
 
+## [1.9.0] — 2026-10-18
+
+### Adicionado
+- Escolha de tema claro ou escuro: botão no cabeçalho (tela de perfis e editor) alterna entre
+  **sistema → claro → escuro**. O padrão continua seguindo o tema do Windows/navegador, e a
+  escolha fica salva no navegador.
+
+### Alterado
+- Nova paleta alinhada ao Windows 11 (Fluent): azul `#0067C0` (claro) / `#4CC2FF` (escuro)
+  sobre cinzas neutros, no lugar do gradiente violeta → ciano. A marca, o favicon e os ícones
+  do PWA passam a usar o azul sólido, mantendo o desenho das janelas com a faísca.
+
 ## [1.8.0] — 2026-10-18
 
 ### Adicionado

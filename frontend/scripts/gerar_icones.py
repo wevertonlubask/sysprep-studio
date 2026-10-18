@@ -29,8 +29,8 @@ def gradiente(n, paradas, diagonal=True):
     return out
 
 
-FUNDO = [(0, "#7c5cff"), (0.38, "#3d5afe"), (0.68, "#2458d6"), (1, "#18b6f0")]
-VIDRO = [(0, "#ffffff"), (1, "#d3e0ff")]
+FUNDO = [(0, "#0067c0"), (1, "#0067c0")]
+VIDRO = [(0, "#ffffff"), (1, "#cfe4f7")]
 
 
 def bezier(p0, p1, p2, p3, n=24):

@@ -37,6 +37,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { api, baixar, baixarUrl, ErroApi, formatarTamanho } from "./api";
 import { EditorCtx, gravar, type Editor } from "./editor";
+import { BotaoTema } from "./componentes/BotaoTema";
 import { XmlView } from "./componentes/XmlView";
 import { MarcaIcone } from "./componentes/Marca";
 import { Cartao, Nota, Secao, Texto } from "./componentes/campos";
@@ -530,6 +531,7 @@ export function TelaEditor({
             >
               {painel ? <PanelRightClose size={18} /> : <PanelRightOpen size={18} />}
             </button>
+            <BotaoTema />
           </div>
         </header>
 

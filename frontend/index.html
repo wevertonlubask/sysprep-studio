@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Monte o sysprep.xml e o pacote de preparo da imagem padrão Windows em Modo Auditoria." />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#161a21" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#2b2b2b" media="(prefers-color-scheme: dark)" />
     <meta name="color-scheme" content="light dark" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -17,6 +17,18 @@
     <link rel="apple-touch-icon" href="/icones/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <title>Sysprep Studio</title>
+    <script>
+      // aplica o tema antes da primeira pintura; mesma regra de src/tema.ts
+      (function () {
+        var t = null;
+        try {
+          t = localStorage.getItem("sysprep.tema");
+        } catch (e) {}
+        if (t !== "claro" && t !== "escuro")
+          t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "escuro" : "claro";
+        document.documentElement.dataset.tema = t;
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

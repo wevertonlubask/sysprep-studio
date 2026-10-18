@@ -1,34 +1,34 @@
 :root {
-  --fundo: #f4f6f9;
+  --fundo: #f3f3f3;
   --superficie: #ffffff;
-  --superficie-2: #f1f3f7;
-  --superficie-3: #e8ecf2;
-  --borda: #e1e5ec;
-  --borda-forte: #c4cbd6;
-  --texto: #161b22;
-  --texto-2: #5a6472;
-  --texto-3: #8a94a3;
-  --primaria: #2458d6;
-  --primaria-hover: #1d4bbd;
+  --superficie-2: #f0f0f0;
+  --superficie-3: #e6e6e6;
+  --borda: #e5e5e5;
+  --borda-forte: #c8c8c8;
+  --texto: #1a1a1a;
+  --texto-2: #5c5c5c;
+  --texto-3: #8a8a8a;
+  --primaria: #0067c0;
+  --primaria-hover: #005a9e;
   --primaria-texto: #ffffff;
-  --primaria-suave: #ebf1fe;
-  --primaria-borda: #b9cdf7;
-  --erro: #c62828;
-  --erro-suave: #fdecec;
-  --alerta: #a15c00;
-  --alerta-suave: #fff4e0;
-  --ok: #1d7a3e;
-  --ok-suave: #e6f5ec;
-  --info-suave: #edf3fc;
-  --codigo-fundo: #fbfcfd;
-  --x-tag: #2458d6;
+  --primaria-suave: #e8f2fb;
+  --primaria-borda: #b3d4f0;
+  --erro: #c42b1c;
+  --erro-suave: #fde7e9;
+  --alerta: #9d5d00;
+  --alerta-suave: #fff4ce;
+  --ok: #0f7b0f;
+  --ok-suave: #dff6dd;
+  --info-suave: #ebf3fb;
+  --codigo-fundo: #fbfbfb;
+  --x-tag: #0067c0;
   --x-attr: #8a3ab9;
-  --x-val: #1d7a3e;
-  --x-com: #8a94a0;
+  --x-val: #0f7b0f;
+  --x-com: #8a8a8a;
   --raio: 12px;
   --raio-sm: 8px;
-  --sombra: 0 1px 2px rgba(16, 24, 40, 0.05), 0 1px 3px rgba(16, 24, 40, 0.04);
-  --sombra-alta: 0 12px 32px rgba(16, 24, 40, 0.18);
+  --sombra: 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --sombra-alta: 0 12px 32px rgba(0, 0, 0, 0.16);
   --barra-altura: 60px;
   --transicao: 0.15s ease;
   /* entalhe/barra de gestos (PWA em tela cheia, viewport-fit=cover) */
@@ -38,42 +38,40 @@
   --seg-dir: env(safe-area-inset-right, 0px);
   --rodape-altura: 32px;
   --rodape-total: calc(var(--rodape-altura) + var(--seg-base));
-  --marca-gradiente: linear-gradient(120deg, #7c5cff 0%, #3d5afe 40%, #2458d6 65%, #18b6f0 100%);
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --fundo: #0d1015;
-    --superficie: #161a21;
-    --superficie-2: #1d222a;
-    --superficie-3: #252b35;
-    --borda: #282e38;
-    --borda-forte: #3b4350;
-    --texto: #e7eaee;
-    --texto-2: #9aa4b0;
-    --texto-3: #6b7480;
-    --primaria: #5b8cff;
-    --primaria-hover: #7aa2ff;
-    --primaria-texto: #0b1020;
-    --primaria-suave: #19243b;
-    --primaria-borda: #2f4677;
-    --erro: #ff6b6b;
-    --erro-suave: #3a1c1f;
-    --alerta: #f0a847;
-    --alerta-suave: #342816;
-    --ok: #4cc47a;
-    --ok-suave: #15301f;
-    --info-suave: #17213a;
-    --codigo-fundo: #11151a;
-    --x-tag: #7aa7ff;
-    --x-attr: #d49cf5;
-    --x-val: #7fd6a0;
-    --x-com: #6b7580;
-    --sombra: none;
-    --sombra-alta: 0 12px 32px rgba(0, 0, 0, 0.5);
-    color-scheme: dark;
-  }
+/* tema escuro: data-tema e resolvido antes da pintura (index.html) e mantido por tema.ts */
+:root[data-tema="escuro"] {
+  --fundo: #202020;
+  --superficie: #2b2b2b;
+  --superficie-2: #323232;
+  --superficie-3: #3a3a3a;
+  --borda: #3e3e3e;
+  --borda-forte: #555555;
+  --texto: #f3f3f3;
+  --texto-2: #b8b8b8;
+  --texto-3: #8f8f8f;
+  --primaria: #4cc2ff;
+  --primaria-hover: #6ccdff;
+  --primaria-texto: #00182b;
+  --primaria-suave: #1b3245;
+  --primaria-borda: #2d5a7d;
+  --erro: #ff99a4;
+  --erro-suave: #442726;
+  --alerta: #fce100;
+  --alerta-suave: #433519;
+  --ok: #6ccb5f;
+  --ok-suave: #2a3a23;
+  --info-suave: #1e2d3a;
+  --codigo-fundo: #1c1c1c;
+  --x-tag: #6cc4ff;
+  --x-attr: #d49cf5;
+  --x-val: #8fd685;
+  --x-com: #8a8a8a;
+  --sombra: none;
+  --sombra-alta: 0 12px 32px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
 }
 
 * {
@@ -385,7 +383,7 @@ input[type="checkbox"]:focus-visible {
   display: block;
   flex: none;
   border-radius: 23%;
-  box-shadow: 0 2px 8px rgba(61, 90, 254, 0.35);
+  box-shadow: 0 2px 6px rgba(0, 103, 192, 0.3);
 }
 
 .marca-nome {
@@ -397,13 +395,13 @@ input[type="checkbox"]:focus-visible {
 }
 
 .marca-nome-destaque {
-  background: var(--marca-gradiente);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--primaria);
 }
 
-.marca .instalar {
+.marca-acoes {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   margin-left: auto;
 }
 
@@ -1777,7 +1775,7 @@ input[type="checkbox"]:focus-visible {
     right: 0;
     bottom: var(--rodape-total);
     z-index: 11;
-    background: rgba(16, 24, 40, 0.4);
+    background: rgba(0, 0, 0, 0.4);
   }
   .conteudo {
     padding: 20px calc(20px + var(--seg-dir)) 72px calc(20px + var(--seg-esq));
