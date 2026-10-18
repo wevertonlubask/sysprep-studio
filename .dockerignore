@@ -1,0 +1,10 @@
+dados
+legado
+**/node_modules
+**/dist
+**/.venv
+**/__pycache__
+**/.pytest_cache
+backend/tests
+.git
+docs

@@ -1,0 +1,7 @@
+{
+  "name": "manual-sysprep-studio",
+  "private": true,
+  "description": "Gera os manuais do Sysprep Studio (docs/) a partir de gerar_manual.js e dos prints.",
+  "scripts": { "gerar": "node gerar_manual.js" },
+  "dependencies": { "docx": "^9.5.0", "image-size": "^1.2.0" }
+}

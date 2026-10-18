@@ -1,0 +1,10 @@
+services:
+  studio:
+    build: .
+    container_name: sysprep-studio
+    # so localhost: os perfis contem senhas e a chave do Windows
+    ports:
+      - "127.0.0.1:8090:8000"
+    volumes:
+      - ./dados:/dados
+    restart: unless-stopped

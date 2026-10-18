@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Marca do Sysprep Studio: mesmo desenho do MarcaIcone (src/componentes/Marca.tsx)
+       — bloco violeta → azul → ciano com três janelas claras e a faísca
+       no lugar da quarta: a imagem padrão "preparada" para clonar. -->
+  <defs>
+    <linearGradient id="fundo" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c5cff"/>
+      <stop offset="38%" stop-color="#3d5afe"/>
+      <stop offset="68%" stop-color="#2458d6"/>
+      <stop offset="100%" stop-color="#18b6f0"/>
+    </linearGradient>
+    <linearGradient id="brilho" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vidro" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#d3e0ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="url(#fundo)"/>
+  <rect width="64" height="64" rx="15" fill="url(#brilho)"/>
+  <rect x="14" y="14" width="16" height="16" rx="3.5" fill="url(#vidro)"/>
+  <rect x="34" y="14" width="16" height="16" rx="3.5" fill="url(#vidro)"/>
+  <rect x="14" y="34" width="16" height="16" rx="3.5" fill="url(#vidro)"/>
+  <path d="M42 32.5C43 39 45 41 51.5 42C45 43 43 45 42 51.5C41 45 39 43 32.5 42C39 41 41 39 42 32.5Z" fill="#ffffff"/>
+</svg>

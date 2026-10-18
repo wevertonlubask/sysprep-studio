@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+
+    <!-- ============================================================
+         Imagem Padrao - Windows 11 Education
+         Contas: Suporte (admin) e Usuario01 (usuario padrao)
+         Uso: sysprep /generalize /oobe /shutdown /unattend:C:\TEMP\sysprep.xml
+         ============================================================ -->
+
+    <settings pass="windowsPE">
+        <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <UserData>
+                <AcceptEula>true</AcceptEula>
+            </UserData>
+        </component>
+    </settings>
+
+    <settings pass="specialize">
+
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <ProductKey>AAAAA-BBBBB-CCCCC-DDDDD-EEEEE</ProductKey>
+            <TimeZone>E. South America Standard Time</TimeZone>
+            <ComputerName>*</ComputerName>
+            <CopyProfile>true</CopyProfile>
+            <RegisteredOwner>Empresa Exemplo</RegisteredOwner>
+            <RegisteredOrganization>Empresa Exemplo Ltda</RegisteredOrganization>
+        </component>
+
+        <component name="Microsoft-Windows-TerminalServices-LocalSessionManager" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="NonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <fDenyTSConnections>false</fDenyTSConnections>
+        </component>
+
+        <component name="Microsoft-Windows-TerminalServices-RDP-WinStationExtensions" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <!-- SecurityLayer 2 = TLS  |  UserAuthentication 1 = NLA obrigatorio -->
+            <SecurityLayer>2</SecurityLayer>
+            <UserAuthentication>1</UserAuthentication>
+        </component>
+
+        <component name="Networking-MPSSVC-Svc" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="NonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <FirewallGroups>
+                <FirewallGroup wcm:action="add" wcm:keyValue="RemoteDesktop">
+                    <Active>true</Active>
+                    <Group>Remote Desktop</Group>
+                    <Profile>all</Profile>
+                </FirewallGroup>
+            </FirewallGroups>
+            <DomainProfile_EnableFirewall>true</DomainProfile_EnableFirewall>
+            <PrivateProfile_EnableFirewall>true</PrivateProfile_EnableFirewall>
+            <PublicProfile_EnableFirewall>true</PublicProfile_EnableFirewall>
+        </component>
+
+        <!-- ========================================================
+             Personalizacao travada: plano de fundo + tela de bloqueio
+             PRE-REQUISITO: as imagens devem existir em
+             C:\Windows\Web\Branding\ ANTES do sysprep /generalize
+             ======================================================== -->
+        <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <RunSynchronous>
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>1</Order>
+                    <Description>Plano de fundo - caminho</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP" /v DesktopImagePath /t REG_SZ /d "C:\Windows\Web\Branding\plano_de_fundo.jpg" /f</Path>
+                </RunSynchronousCommand>
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>2</Order>
+                    <Description>Plano de fundo - url</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP" /v DesktopImageUrl /t REG_SZ /d "C:\Windows\Web\Branding\plano_de_fundo.jpg" /f</Path>
+                </RunSynchronousCommand>
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>3</Order>
+                    <Description>Plano de fundo - status</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP" /v DesktopImageStatus /t REG_DWORD /d 1 /f</Path>
+                </RunSynchronousCommand>
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>4</Order>
+                    <Description>Tela de bloqueio - caminho</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP" /v LockScreenImagePath /t REG_SZ /d "C:\Windows\Web\Branding\tela_bloqueio.jpg" /f</Path>
+                </RunSynchronousCommand>
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>5</Order>
+                    <Description>Tela de bloqueio - url</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP" /v LockScreenImageUrl /t REG_SZ /d "C:\Windows\Web\Branding\tela_bloqueio.jpg" /f</Path>
+                </RunSynchronousCommand>
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>6</Order>
+                    <Description>Tela de bloqueio - status</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP" /v LockScreenImageStatus /t REG_DWORD /d 1 /f</Path>
+                </RunSynchronousCommand>
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>7</Order>
+                    <Description>Politica - tela de bloqueio fixa (Education/Enterprise)</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization" /v LockScreenImage /t REG_SZ /d "C:\Windows\Web\Branding\tela_bloqueio.jpg" /f</Path>
+                </RunSynchronousCommand>
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>8</Order>
+                    <Description>Politica - impedir troca da tela de bloqueio</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization" /v NoChangingLockScreen /t REG_DWORD /d 1 /f</Path>
+                </RunSynchronousCommand>
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>9</Order>
+                    <Description>Desativar Windows Spotlight (senao sobrescreve a tela de bloqueio)</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsSpotlightFeatures /t REG_DWORD /d 1 /f</Path>
+                </RunSynchronousCommand>
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>10</Order>
+                    <Description>Desativar Spotlight na tela de bloqueio</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v ConfigureWindowsSpotlight /t REG_DWORD /d 2 /f</Path>
+                </RunSynchronousCommand>
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>11</Order>
+                    <Description>Desativar sugestoes e apps promocionais da Microsoft</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /t REG_DWORD /d 1 /f</Path>
+                </RunSynchronousCommand>
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>12</Order>
+                    <Description>Tela de login sem desfoque (imagem nitida)</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v DisableAcrylicBackgroundOnLogon /t REG_DWORD /d 1 /f</Path>
+                </RunSynchronousCommand>
+
+                <!-- ====================================================
+                     Supressao do OOBE (reforco aos Skip*OOBE do oobeSystem).
+                     Sem isto o Windows 11 ainda exibe as telas de privacidade.
+                     ==================================================== -->
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>13</Order>
+                    <Description>Pular as telas de privacidade do OOBE</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows\OOBE" /v DisablePrivacyExperience /t REG_DWORD /d 1 /f</Path>
+                </RunSynchronousCommand>
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>14</Order>
+                    <Description>Dispensar exigencia de internet no OOBE</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE" /v BypassNRO /t REG_DWORD /d 1 /f</Path>
+                </RunSynchronousCommand>
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>15</Order>
+                    <Description>Desligar a animacao de primeiro logon</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableFirstLogonAnimation /t REG_DWORD /d 0 /f</Path>
+                </RunSynchronousCommand>
+
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>16</Order>
+                    <Description>Desligar o "Vamos terminar de configurar seu dispositivo" (SCOOBE)</Description>
+                    <Path>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\UserProfileEngagement" /v ScoobeSystemSettingEnabled /t REG_DWORD /d 0 /f</Path>
+                </RunSynchronousCommand>
+
+            </RunSynchronous>
+        </component>
+
+    </settings>
+
+    <settings pass="oobeSystem">
+
+        <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <!-- Teclado ABNT2: trocar InputLocale para 0416:00010416 -->
+            <InputLocale>pt-BR</InputLocale>
+            <SystemLocale>pt-BR</SystemLocale>
+            <UILanguage>pt-BR</UILanguage>
+            <UserLocale>pt-BR</UserLocale>
+        </component>
+
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <OOBE>
+                <HideEULAPage>true</HideEULAPage>
+                <HideLocalAccountScreen>true</HideLocalAccountScreen>
+                <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
+                <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+                <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+                <NetworkLocation>Work</NetworkLocation>
+                <ProtectYourPC>3</ProtectYourPC>
+                <!-- Deprecados pela Microsoft, mas sao o que efetivamente pula o OOBE
+                     nesta imagem. Reforcados pelas chaves de registro no passe specialize
+                     (DisablePrivacyExperience / BypassNRO / Scoobe). -->
+                <SkipMachineOOBE>true</SkipMachineOOBE>
+                <SkipUserOOBE>true</SkipUserOOBE>
+            </OOBE>
+            <UserAccounts>
+                <LocalAccounts>
+
+                    <LocalAccount wcm:action="add">
+                        <Name>Suporte</Name>
+                        <DisplayName>Suporte</DisplayName>
+                        <Description>Conta administrativa de suporte tecnico</Description>
+                        <Group>Administrators</Group>
+                        <Password>
+                            <Value>UwBlAG4AaABhAFMAdQBwAG8AcgB0AGUAIwAxAFAAYQBzAHMAdwBvAHIAZAA=</Value>
+                            <PlainText>false</PlainText>
+                        </Password>
+                    </LocalAccount>
+
+                    <LocalAccount wcm:action="add">
+                        <Name>Usuario01</Name>
+                        <DisplayName>Usuario 01</DisplayName>
+                        <Description>Conta de uso geral</Description>
+                        <Group>Administrators</Group>
+                        <Password>
+                            <Value>UwBlAG4AaABhAFUAcwB1AGEAcgBpAG8AIwAyAFAAYQBzAHMAdwBvAHIAZAA=</Value>
+                            <PlainText>false</PlainText>
+                        </Password>
+                    </LocalAccount>
+
+                </LocalAccounts>
+            </UserAccounts>
+        </component>
+
+    </settings>
+
+</unattend>

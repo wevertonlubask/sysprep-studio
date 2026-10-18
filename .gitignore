@@ -1,0 +1,29 @@
+# Perfis, senhas, chaves e imagens enviadas pela interface - NUNCA versionar
+dados/
+*.zip
+
+# Material de referencia local (XML real, scripts e imagens de cliente) - NUNCA versionar
+legado/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.coverage
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo
+
+# Pacotes gerados e saidas locais
+*.log
+.env
+
+# Manuais: só os PDFs de docs/ vão para o git; o resto é regerado por docs/manual/ferramentas
+docs/manual/*.docx
+docs/manual/prints/
+docs/manual/ferramentas/node_modules/
+docs/manual/ferramentas/.dados-manual/
+docs/manual/ferramentas/.ids-manual.json

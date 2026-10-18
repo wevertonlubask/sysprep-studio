@@ -1,0 +1,12 @@
+# Contêiner só para os prints do manual: dados fictícios em .dados-manual/ (fora do git),
+# porta 8091. Os perfis reais (./dados na raiz) não são tocados.
+#   docker compose -f docs/manual/ferramentas/docker-compose.manual.yml -p sysprep-manual up -d --build
+name: sysprep-manual
+services:
+  studio:
+    build: ../../..
+    container_name: sysprep-studio-manual
+    ports:
+      - "127.0.0.1:8091:8000"
+    volumes:
+      - ./.dados-manual:/dados
