@@ -418,12 +418,45 @@ if ($M.remover_onedrive) {
 
 # ------------------------------------------------------- 6. registro por usuario
 
-Titulo '6/10  Ajustes por usuario (HKCU do auditor + perfil Default)'
+Titulo '6/10  Variaveis de ambiente e ajustes por usuario'
+
+# Grava como REG_EXPAND_SZ (o tipo do Path do Windows): o valor pode citar
+# outra variavel, ex.: %ANDROID_HOME%\platform-tools. Le o valor atual SEM
+# expandir, senao o %USERPROFILE% do Path do Default viraria o caminho do auditor.
+function Definir-Variavel {
+    param([string]$Chave, $V)
+    if (-not (Test-Path -LiteralPath $Chave)) { New-Item -Path $Chave -Force | Out-Null }
+    $k = Get-Item -LiteralPath $Chave
+    $atual = $k.GetValue($V.nome, $null, 'DoNotExpandEnvironmentNames')
+    $k.Close()
+    $valor = $V.valor
+    if ($V.acrescentar -and $atual) {
+        $itens = @($atual -split ';' | Where-Object { $_ })
+        # -notcontains ignora maiusculas, como o proprio Windows nos caminhos
+        $novos = @($V.valor -split ';' | Where-Object { $_ -and $itens -notcontains $_ })
+        if ($novos.Count -eq 0) { return "$($V.nome): ja continha $($V.valor)" }
+        $valor = ($itens + $novos) -join ';'
+    }
+    New-ItemProperty -LiteralPath $Chave -Name $V.nome -Value $valor -PropertyType ExpandString -Force | Out-Null
+    return "$($V.nome) $(if ($V.acrescentar) { '+=' } else { '=' }) $($V.valor)"
+}
+
+# Maquina: Session Manager\Environment sobrevive ao generalize e vale para todos.
+$variaveis = @($M.variaveis)
+$varsUsuario = @($variaveis | Where-Object { $_.escopo -eq 'usuario' })
+foreach ($v in @($variaveis | Where-Object { $_.escopo -eq 'maquina' })) {
+    try {
+        Escrever ("[maquina] " + (Definir-Variavel 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' $v)) 'OK'
+    } catch {
+        Escrever "Falha na variavel de maquina $($v.nome): $($_.Exception.Message)" 'AVISO'
+    }
+}
+if ($variaveis.Count -eq 0) { Escrever 'Nenhuma variavel de ambiente no perfil.' }
 
 # Aplica no HKCU do Administrador de auditoria (e o que o CopyProfile copia)
 # E no NTUSER.DAT do perfil Default (usado quando nao ha CopyProfile).
 $ajustes = @($M.registro_usuario)
-if ($ajustes.Count -eq 0) {
+if ($ajustes.Count + $varsUsuario.Count -eq 0) {
     Escrever 'Nenhum ajuste por usuario.'
 } else {
     $hive = 'HKU\SysprepStudioDefault'
@@ -456,7 +489,14 @@ if ($ajustes.Count -eq 0) {
                     Escrever "Falha em $chave\$($a.nome): $($_.Exception.Message)" 'AVISO'
                 }
             }
-            Escrever "$($ajustes.Count) ajuste(s) aplicados em $raiz" 'OK'
+            if ($ajustes.Count -gt 0) { Escrever "$($ajustes.Count) ajuste(s) aplicados em $raiz" 'OK' }
+            foreach ($v in $varsUsuario) {
+                try {
+                    Escrever ("[usuario] " + (Definir-Variavel (Join-Path $raiz 'Environment') $v) + " em $raiz") 'OK'
+                } catch {
+                    Escrever "Falha na variavel $($v.nome) em ${raiz}: $($_.Exception.Message)" 'AVISO'
+                }
+            }
         }
     } finally {
         if ($default) {

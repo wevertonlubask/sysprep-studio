@@ -17,6 +17,11 @@ RESERVADOS_CONTA = {"administrator", "administrador", "guest", "convidado", "def
                     "wdagutilityaccount", "system", "none"}
 RE_RESOLUCAO = re.compile(r"^[1-9]\d{2,3}x[1-9]\d{2,3}$")
 RE_COMPUTADOR =re.compile(r"^[A-Za-z0-9-]{1,15}$")
+RE_VARIAVEL = re.compile(r"^[A-Za-z_][A-Za-z0-9_.()-]*$")
+# trocar o valor destas quebra o Windows ou programas; acrescentar e seguro
+VARIAVEIS_SISTEMA = {"path", "pathext", "psmodulepath", "systemroot", "windir", "comspec", "temp", "tmp",
+                     "os", "number_of_processors", "processor_architecture", "driverdata", "userprofile",
+                     "appdata", "localappdata", "programfiles", "programdata"}
 REINICIO = {r["id"] for r in RECURSOS if "reinício" in r.get("nota", "").lower()}
 
 
@@ -227,6 +232,9 @@ def validar(p: Perfil, imagens: set[str] | None = None, drivers: list[dict] | No
     if s.pular_rearm:
         info("sysprep", "SkipRearm: o generalize não consome rearm, mas a contagem de ativação não é reiniciada.")
 
+    # ---------------- variaveis de ambiente
+    _validar_variaveis(p, erro, aviso, info)
+
     # ---------------- comandos
     for passe, lista in (("especialização", p.comandos.especializacao), ("primeiro logon", p.comandos.primeiro_logon)):
         for i, cmd in enumerate(lista, 1):
@@ -236,6 +244,39 @@ def validar(p: Perfil, imagens: set[str] | None = None, drivers: list[dict] | No
                 erro("comandos", f"Comando {i} de {passe} passa de 1024 caracteres (limite do unattend).")
 
     return [asdict(a) for a in r]
+
+
+def _validar_variaveis(p: Perfil, erro, aviso, info) -> None:
+    s = "variaveis"
+    vistas: dict[tuple[str, str], int] = {}
+    for i, v in enumerate(p.variaveis, 1):
+        n = v.nome.strip()
+        rotulo = f"Variável {i} ({n or 'sem nome'})"
+        if not n:
+            erro(s, f"{rotulo}: nome obrigatório.")
+            continue
+        if not RE_VARIAVEL.match(n):
+            erro(s, f"{rotulo}: nome inválido. Use letras, números e _ (sem espaço, = ou %), começando por letra.")
+        if not v.valor.strip():
+            erro(s, f"{rotulo}: valor obrigatório.")
+        if '"' in v.valor:
+            erro(s, f"{rotulo}: o valor não pode ter aspas duplas (o Windows não as remove ao usar a variável).")
+        chave = (n.lower(), v.escopo)
+        if chave in vistas and not v.acrescentar:
+            erro(s, f"{rotulo}: repete a variável {vistas[chave]} no mesmo escopo.")
+        vistas.setdefault(chave, i)
+        if n.lower() in VARIAVEIS_SISTEMA and not v.acrescentar:
+            if n.lower() == "path":
+                erro(s, f"{rotulo}: substituir o Path apagaria os caminhos do Windows e dos programas. "
+                        "Marque \"Acrescentar ao valor atual\".")
+            else:
+                aviso(s, f"{rotulo}: variável do Windows. Trocar o valor pode quebrar o sistema ou programas.")
+    if p.variaveis:
+        info(s, "As variáveis são gravadas pelo Preparar-Imagem.cmd (passo 6), em Modo Auditoria, e o "
+                "generalize as preserva. O sysprep.xml sozinho não as aplica.")
+    if any(v.escopo == "usuario" for v in p.variaveis):
+        info(s, "Escopo usuário vale para as contas criadas depois do Sysprep (perfil Default) e para o "
+                "Administrador de auditoria (copiado com CopyProfile).")
 
 
 def _validar_tela_inicial(p: Perfil, admins: list, erro, aviso, info) -> None:

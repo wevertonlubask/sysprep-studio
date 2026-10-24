@@ -1,7 +1,7 @@
 import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import { useEditor } from "../editor";
-import { Cartao, Escolha, Grade, ListaMarcavel, Nota, Numero, Secao, Texto, Toggle } from "../componentes/campos";
-import type { Comando } from "../tipos";
+import { Cartao, Escolha, Grade, ListaMarcavel, Nota, Numero, Secao, Selecao, Texto, Toggle } from "../componentes/campos";
+import type { Comando, Variavel } from "../tipos";
 
 export function Privacidade() {
   return (
@@ -88,6 +88,66 @@ export function Apps() {
           </div>
         </Grade>
       </Cartao>
+    </Secao>
+  );
+}
+
+const ESCOPOS = [
+  { valor: "maquina", rotulo: "Máquina (todos os usuários)" },
+  { valor: "usuario", rotulo: "Usuário (cada conta nova)" },
+];
+
+export function Variaveis() {
+  const { perfil, set } = useEditor();
+  const lista = perfil.variaveis;
+  const gravar = (l: Variavel[]) => set("variaveis", l);
+  return (
+    <Secao
+      titulo="Variáveis de ambiente"
+      descricao="Gravadas no registro pelo script de preparo, em Modo Auditoria. O generalize preserva o registro: cada máquina clonada já nasce com elas."
+    >
+      <div className="contas">
+        {lista.map((v, i) => (
+          <Cartao
+            key={i}
+            titulo={v.nome || "Nova variável"}
+            extra={
+              <button type="button" className="icone perigo" title="Excluir variável" onClick={() => gravar(lista.filter((_, j) => j !== i))}>
+                <Trash2 size={16} />
+              </button>
+            }
+          >
+            <Grade>
+              <Texto caminho={`variaveis.${i}.nome`} rotulo="Nome" placeholder="ANDROID_HOME" mono />
+              <Selecao caminho={`variaveis.${i}.escopo`} rotulo="Escopo" opcoes={ESCOPOS} />
+            </Grade>
+            <Texto
+              caminho={`variaveis.${i}.valor`}
+              rotulo="Valor"
+              placeholder={v.acrescentar ? "%ANDROID_HOME%\\platform-tools;%ANDROID_HOME%\\emulator" : "C:\\Android\\Sdk"}
+              dica="Pode citar outra variável entre %, ex.: %ANDROID_HOME%\platform-tools. Vários itens separados por ;"
+              mono
+            />
+            <Toggle
+              caminho={`variaveis.${i}.acrescentar`}
+              rotulo="Acrescentar ao valor atual"
+              dica="Para listas como o Path: junta os itens ao fim, sem repetir os que já existem. Desligado, substitui o valor."
+            />
+          </Cartao>
+        ))}
+        <button type="button" className="botao adicionar" onClick={() => gravar([...lista, { nome: "", valor: "", escopo: "maquina", acrescentar: false }])}>
+          <Plus size={16} /> Adicionar variável
+        </button>
+      </div>
+      <Nota>
+        Exemplo (Android Studio): <code>ANDROID_HOME = C:\Android\Sdk</code>, <code>JAVA_HOME = C:\Program Files\Android\Android Studio\jbr</code> e{" "}
+        <code>Path</code> com “acrescentar” = <code>%ANDROID_HOME%\platform-tools;%JAVA_HOME%\bin</code>, todas no escopo Máquina.
+      </Nota>
+      <Nota tipo="aviso">
+        Instale SDKs e ferramentas numa pasta da máquina (ex.: <code>C:\Android\Sdk</code>), não no padrão por usuário (
+        <code>%LOCALAPPDATA%</code>): o perfil do Administrador de auditoria não chega às contas das máquinas clonadas, e a variável
+        apontaria para uma pasta que não existe.
+      </Nota>
     </Secao>
   );
 }

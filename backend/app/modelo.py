@@ -257,6 +257,18 @@ class Comandos(BaseModel):
     primeiro_logon: list[Comando] = Field(default_factory=list)
 
 
+class Variavel(BaseModel):
+    """Variavel de ambiente gravada pelo script de preparo, em auditoria.
+    O generalize preserva o registro: ela chega pronta em cada clone."""
+    nome: str = ""
+    valor: str = ""
+    # maquina: Session Manager\Environment (todos os usuarios)
+    # usuario: HKCU\Environment do auditor + perfil Default (contas novas)
+    escopo: Literal["maquina", "usuario"] = "maquina"
+    # True: junta ao valor atual (lista com ";", ex.: Path) sem repetir itens
+    acrescentar: bool = False
+
+
 class Perfil(BaseModel):
     nome: str = "Novo perfil"
     descricao: str = ""
@@ -277,3 +289,4 @@ class Perfil(BaseModel):
     seguranca: Seguranca = Field(default_factory=Seguranca)
     sysprep: Sysprep = Field(default_factory=Sysprep)
     comandos: Comandos = Field(default_factory=Comandos)
+    variaveis: list[Variavel] = Field(default_factory=list)

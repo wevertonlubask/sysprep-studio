@@ -21,6 +21,9 @@ frontend/*.tsbuildinfo
 *.log
 .env
 
+# Override local do compose (ex.: abrir a porta na rede) - cada maquina decide
+docker-compose.override.yml
+
 # Manuais: só os PDFs de docs/ vão para o git; o resto é regerado por docs/manual/ferramentas
 docs/manual/*.docx
 docs/manual/prints/

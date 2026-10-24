@@ -29,6 +29,7 @@ import {
   Terminal,
   TriangleAlert,
   Users,
+  Variable,
   Info,
   Wifi as IconeWifi,
   X,
@@ -48,7 +49,7 @@ import { AcessoRemoto, Dominio, Firewall, Oobe } from "./secoes/sistema";
 import { Personalizacao } from "./secoes/visual";
 import { Wifi } from "./secoes/wifi";
 import { TelaInicial } from "./secoes/telaInicial";
-import { Apps, Atualizacoes, Comandos, Energia, Privacidade, Seguranca, Sysprep } from "./secoes/outros";
+import { Apps, Atualizacoes, Comandos, Energia, Privacidade, Seguranca, Sysprep, Variaveis } from "./secoes/outros";
 import type { Aviso, Catalogo, InfoDriver, InfoImagem, Perfil, Previa } from "./tipos";
 
 interface ItemNav {
@@ -121,6 +122,7 @@ const GRUPOS: GrupoNav[] = [
       { id: "personalizacao", rotulo: "Aparência", icone: Paintbrush, tela: () => <Personalizacao /> },
       { id: "apps", rotulo: "Apps e recursos", icone: AppWindow, tela: () => <Apps /> },
       { id: "drivers", rotulo: "Drivers", icone: Cpu, tela: () => <Drivers /> },
+      { id: "variaveis", rotulo: "Variáveis de ambiente", icone: Variable, tela: () => <Variaveis /> },
       { id: "energia", rotulo: "Energia", icone: Battery, tela: () => <Energia /> },
     ],
   },

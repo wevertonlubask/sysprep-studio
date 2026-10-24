@@ -13,6 +13,13 @@ export interface Comando {
   comando: string;
 }
 
+export interface Variavel {
+  nome: string;
+  valor: string;
+  escopo: "maquina" | "usuario";
+  acrescentar: boolean;
+}
+
 export interface RedeWifi {
   ssid: string;
   seguranca: "wpa2" | "wpa3" | "aberta";
@@ -185,6 +192,7 @@ export interface Perfil {
     restaurar_windows_update: boolean;
   };
   comandos: { especializacao: Comando[]; primeiro_logon: Comando[] };
+  variaveis: Variavel[];
 }
 
 export interface ItemCatalogo {

@@ -23,6 +23,10 @@ RECURSOS_DIR = Path(__file__).parent / "recursos"
 WSL, VMP = "Microsoft-Windows-Subsystem-Linux", "VirtualMachinePlatform"
 
 
+def variaveis_validas(p: Perfil) -> list:
+    return [v for v in p.variaveis if v.nome.strip() and v.valor.strip()]
+
+
 def nome_pasta(p: Perfil) -> str:
     ascii_ = unicodedata.normalize("NFKD", p.nome).encode("ascii", "ignore").decode()
     base = re.sub(r"[^A-Za-z0-9._-]+", "-", ascii_).strip("-") or "perfil"
@@ -83,6 +87,8 @@ def manifesto(p: Perfil, agora: datetime, drivers: list[dict] | None = None) -> 
         "recursos_desativar": p.apps.recursos_desativar,
         "drivers": [{"origem": f"drivers/{d['arquivo']}", "tamanho": d["tamanho"]} for d in drivers or []],
         "registro_usuario": ajustes_usuario(p),
+        "variaveis": [{"nome": v.nome.strip(), "valor": v.valor.strip(), "escopo": v.escopo,
+                       "acrescentar": v.acrescentar} for v in variaveis_validas(p)],
         "sysprep": {
             "entrar_em": p.sysprep.entrar_em,
             "ao_final": p.sysprep.ao_final,
@@ -277,6 +283,12 @@ def leia_me(p: Perfil, m: dict) -> str:
         L += [f"     - {d['origem'].split('/', 1)[1]}" for d in m["drivers"]]
         L += ["     Cada máquina instala só os drivers do próprio hardware no 1º boot.",
               "     Pendrive em FAT32 não aceita arquivo acima de 4 GB: use NTFS ou exFAT."]
+
+    if m["variaveis"]:
+        L += ["", "  Variáveis de ambiente (gravadas pelo script, passo 6):"]
+        L += [f"     {v['nome']} {'+=' if v['acrescentar'] else '='} {v['valor']}"
+              f"  ({'máquina' if v['escopo'] == 'maquina' else 'usuário, contas novas'})"
+              for v in m["variaveis"]]
 
     esp = comandos_especializacao(p)
     if esp:

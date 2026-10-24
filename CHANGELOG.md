@@ -4,6 +4,15 @@ Versões no padrão [SemVer](https://semver.org/lang/pt-BR/): **MAJOR** quebra p
 existentes, **MINOR** traz recurso novo, **PATCH** corrige ou melhora sem mudar o que o usuário faz.
 A versão fica em `frontend/package.json` e aparece no rodapé do sistema.
 
+## [1.10.0] — 2026-10-23
+
+### Adicionado
+- Seção **Sistema → Variáveis de ambiente**: variáveis de máquina (todos os usuários) ou de
+  usuário (contas novas, pelo perfil Default), com opção de **acrescentar** a listas como o
+  `Path` sem repetir itens. O `Preparar-Imagem.cmd` as grava em Modo Auditoria (passo 6) como
+  `REG_EXPAND_SZ`, e o generalize as preserva. Ex.: `ANDROID_HOME`, `JAVA_HOME` e o `Path` do
+  Android SDK.
+
 ## [1.9.0] — 2026-10-18
 
 ### Adicionado

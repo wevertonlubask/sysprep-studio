@@ -379,6 +379,46 @@ def test_wsl_puxa_plataforma_de_vm_e_instala_pacote():
     assert not m["instalar_wsl"] and m["recursos_ativar"] == ["NetFx3"]
 
 
+# ------------------------------------------------------------------ variaveis
+
+def test_variaveis_no_manifesto_e_leia_me():
+    from datetime import datetime
+    from app.modelo import Variavel
+    p = _perfil_valido()
+    p.variaveis = [Variavel(nome="ANDROID_HOME", valor=r"C:\Android\Sdk"),
+                   Variavel(nome="Path", valor=r"%ANDROID_HOME%\platform-tools", acrescentar=True),
+                   Variavel(nome="GRADLE_USER_HOME", valor=r"D:\gradle", escopo="usuario"),
+                   Variavel(nome="", valor="")]  # linha em branco: fica de fora
+    m = pacote.manifesto(p, datetime.now())
+    assert m["variaveis"] == [
+        {"nome": "ANDROID_HOME", "valor": r"C:\Android\Sdk", "escopo": "maquina", "acrescentar": False},
+        {"nome": "Path", "valor": r"%ANDROID_HOME%\platform-tools", "escopo": "maquina", "acrescentar": True},
+        {"nome": "GRADLE_USER_HOME", "valor": r"D:\gradle", "escopo": "usuario", "acrescentar": False},
+    ]
+    assert r"Path += %ANDROID_HOME%\platform-tools" in pacote.leia_me(p, m)
+    # nada vai para o XML: o script grava em auditoria e o generalize preserva
+    assert "ANDROID_HOME" not in gerador_xml.gerar(p)
+
+
+def test_variaveis_validacao():
+    from app.modelo import Variavel
+    p = _perfil_valido()
+    p.variaveis = [Variavel(nome="ANDROID_HOME", valor=r"C:\Android\Sdk"),
+                   Variavel(nome="Path", valor=r"%ANDROID_HOME%\platform-tools", acrescentar=True)]
+    assert not [a for a in validar(p) if a["nivel"] == "erro"]
+
+    p.variaveis = [Variavel(nome="Path", valor=r"C:\x"),                # substituiria o Path
+                   Variavel(nome="MEU VAR", valor="1"),                 # espaco
+                   Variavel(nome="A", valor=""),                        # sem valor
+                   Variavel(nome="B", valor="1"), Variavel(nome="b", valor="2")]  # repetida
+    erros = [a["mensagem"] for a in validar(p) if a["nivel"] == "erro" and a["secao"] == "variaveis"]
+    assert len(erros) == 4
+    assert any("Path" in e for e in erros) and any("repete" in e for e in erros)
+
+    p.variaveis = [Variavel(nome="b", valor="1", escopo="usuario"), Variavel(nome="b", valor="2")]
+    assert not [a for a in validar(p) if a["nivel"] == "erro"]  # escopos diferentes
+
+
 # ------------------------------------------------------------------ wifi
 
 def _com_wifi() -> Perfil:
